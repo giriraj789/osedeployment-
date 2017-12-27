@@ -1,0 +1,26 @@
+
+
+
+
+  - name: copy logging-fluentd-dc
+    copy: src=../files/logging-fluentd-dc dest=/var/tmp/
+ 
+  - name: Deploy logging
+    script: ../scripts/logging_deploy.sh creates=/var/tmp/logging-is-deployed
+ 
+  - name: create stub file for logging complete
+    file: path=/var/tmp/logging-is-deployed state=touch
+ 
+  - name: Deploy meteringw3  
+    script: ../scripts/metrics_deploy.sh creates=/var/tmp/metrics-is-deployed
+ 
+  - name: create stub file for metering complete
+    file: path=/var/tmp/metrics-is-deployed state=touch
+ 
+  - name: copy new project template file to master1
+    copy: src=../files/new-project-template.yaml dest=/tmp/new-project-template.yaml
+ 
+  - name: update default project template
+    shell: oc create -f /tmp/new-project-template.yaml -n default
+    args:
+      creates: /var/tmp/project-template-is-deployed

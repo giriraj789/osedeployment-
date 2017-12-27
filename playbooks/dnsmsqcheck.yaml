@@ -1,0 +1,11 @@
+-  hosts: nodes
+   become: yes
+   gather_facts: no
+   tasks:
+   - name: COPY REPO
+     copy: src={{ item }} dest=/etc/dnsmasq.d/
+     with_items:
+     - ../files/origin-upstream-dns.conf
+   - name: service dnsmasq restart
+     shell: systemctl restart dnsmasq 
+

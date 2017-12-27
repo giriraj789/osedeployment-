@@ -1,0 +1,6 @@
+[ocp3.3]
+name=ocp3.3
+baseurl=http://192.168.124.9/repo/ocp3.3/
+enabled=1
+gpgcheck=0
+

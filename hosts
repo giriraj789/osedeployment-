@@ -1,0 +1,63 @@
+#OPENSHIFT INSTALLATION 2 MASTERS (1 Master will be your infra node) 1 NODE (container runtime)
+[OSEv3:children]
+masters
+etcd
+nodes
+controller
+
+
+[OSEv3:vars]
+ansible_ssh_user=root
+deployment_type=openshift-enterprise
+osm_default_subdomain=giriaddns.net
+#docker_version="1.10.3"
+openshift_docker_options="--log-driver=json-file --log-opt max-size=50m"
+osm_default_node_selector='region=primary'
+openshift_router_selector='region=infra'
+openshift_registry_selector='region=infra'
+openshift_master_identity_providers=[{'name': 'htpasswd_auth','login': 'true', 'challenge': 'true','kind': 'HTPasswdPasswordIdentityProvider','filename': '/etc/origin/htpasswd'}]
+openshift_master_default_subdomain=giriaddns.net
+os_sdn_network_plugin_name='redhat/openshift-ovs-multitenant'
+openshift_node_proxy_mode='userspace'
+openshift_install_examples=false 
+openshift_hosted_metrics_public_url=https://hawkular-metrics.giriaddns.net/hawkular/metrics
+openshift_master_console_port=8443
+openshift_master_api_port=8443
+
+#HA
+openshift_master_cluster_method=native
+openshift_master_cluster_hostname=master1.giriaddns.net
+openshift_master_cluster_public_hostname=master1.giriaddns.net
+
+#ROUTER
+openshift_hosted_router_selector='region=infra'
+openshift_hosted_router_replicas=1
+openshift_hosted_registry_selector='region=infra'
+openshift_hosted_registry_replicas=1
+
+[masters]
+master1.giriaddns.net openshift_node_labels="{'region': 'infra', 'zone':'default'}" openshift_schedulable=false
+master2.giriaddns.net openshift_node_labels="{'region': 'infra', 'zone':'default'}" openshift_schedulable=false
+
+[etcd]
+master1.giriaddns.net
+master2.giriaddns.net
+
+[nodes]
+node1.giriaddns.net openshift_node_labels="{'region': 'primary', 'zone': 'default'}"
+infra1.giriaddns.net openshift_node_labels="{'region': 'infra', 'zone':'default'}"
+
+[controller]
+chefserver.giriaddns.net 
+
+[all]
+master1.giriaddns.net
+master2.giriaddns.net
+infra1.giriaddns.net
+node1.giriaddns.net
+
+[master1]
+master1.giriaddns.net 
+
+[master2]
+master2.giriaddns.net

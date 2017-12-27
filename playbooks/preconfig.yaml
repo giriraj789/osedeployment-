@@ -1,0 +1,14 @@
+ - hosts: all
+   become: yes
+   gather_facts: no
+   tasks:
+
+
+   - name: COPY REPO 
+     copy: src=../files/ocp3.3.repo  dest=/etc/yum.repos.d/ 
+
+   - name: install pkgs from prereq guide
+     yum: name=wget,git,net-tools,bind-utils,iptables-services,bridge-utils,bash-completion state=installed
+ 
+   - name: update all packages to current
+     yum: name=* state=latest     

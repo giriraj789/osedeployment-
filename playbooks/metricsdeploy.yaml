@@ -1,0 +1,8 @@
+- hosts: master1
+  become: yes
+  gather_facts: no
+  tasks:
+
+  - name: Deploy meteringw3
+    script: ../scripts/mdeploy.sh 
+
